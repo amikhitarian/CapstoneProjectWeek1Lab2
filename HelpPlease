@@ -1,0 +1,177 @@
+<center>
+    <img src="https://gitlab.com/ibm/skills-network/courses/placeholder101/-/raw/master/labs/module%201/images/IDSNlogo.png" width="300" alt="cognitiveclass.ai logo"  />
+</center>
+
+
+# **Collecting Job Data Using APIs**
+
+
+Estimated time needed: **45 to 60** minutes
+
+
+## Objectives
+
+
+After completing this lab, you will be able to:
+
+
+*   Collect job data from GitHub Jobs API
+*   Store the collected data into an excel spreadsheet.
+
+
+## Warm-Up Exercise
+
+
+Before you attempt the actual lab, here is a fully solved warmup exercise that will help you to learn how to access an API.
+
+
+Using an API, let us find out who currently are on the International Space Station (ISS).<br> The API at [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json?utm_medium=Exinfluencer&utm_source=Exinfluencer&utm_content=000026UJ&utm_term=10006555&utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDA0321ENSkillsNetwork21426264-2021-01-01&cm_mmc=Email_Newsletter-\_-Developer_Ed%2BTech-\_-WW_WW-\_-SkillsNetwork-Courses-IBM-DA0321EN-SkillsNetwork-21426264&cm_mmca1=000026UJ&cm_mmca2=10006555&cm_mmca3=M12345678&cvosrc=email.Newsletter.M12345678&cvo_campaign=000026UJ) gives us the information of astronauts currently on ISS in json format.<br>
+You can read more about this API at [http://open-notify.org/Open-Notify-API/People-In-Space/](http://open-notify.org/Open-Notify-API/People-In-Space?utm_medium=Exinfluencer&utm_source=Exinfluencer&utm_content=000026UJ&utm_term=10006555&utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDA0321ENSkillsNetwork21426264-2021-01-01&cm_mmc=Email_Newsletter-\_-Developer_Ed%2BTech-\_-WW_WW-\_-SkillsNetwork-Courses-IBM-DA0321EN-SkillsNetwork-21426264&cm_mmca1=000026UJ&cm_mmca2=10006555&cm_mmca3=M12345678&cvosrc=email.Newsletter.M12345678&cvo_campaign=000026UJ)
+
+
+import requests # you need this module to make an API call
+
+api_url = "http://api.open-notify.org/astros.json" # this url gives use the astronaut data
+
+response = requests.get(api_url) # Call the API using the get method and store the
+                                # output of the API call in a variable called response.
+
+if response.ok:             # if all is well() no errors, no network timeouts)
+    data = response.json()  # store the result in json format in a variable called data
+                            # the variable data is of type dictionary.
+
+print(data)   # print the data just to check the output or for debugging
+
+Print the number of astronauts currently on ISS.
+
+
+print(data.get('number'))
+
+Print the names of the astronauts currently on ISS.
+
+
+astronauts = data.get('people')
+print("There are {} astronauts on ISS".format(len(astronauts)))
+print("And their names are :")
+for astronaut in astronauts:
+    print(astronaut.get('name'))
+
+Hope the warmup was helpful. Good luck with your next lab!
+
+
+## Lab: Collect Jobs Data using GitHub Jobs API
+
+
+### Objective: Determine the number of jobs currently open for various technologies
+
+
+Collect the number of job postings for the following languages using the API:
+
+*   C
+*   C#
+*   C++
+*   Java
+*   JavaScript
+*   Python
+*   Scala
+*   Oracle
+*   SQL Server
+*   MySQL Server
+*   PostgreSQL
+*   MongoDB
+
+
+import requests #Import required libraries
+import json
+
+baseurl = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DA0321EN-SkillsNetwork/labs/module%201/datasets/githubposting.json"
+response = requests.get(baseurl)
+data = response.json
+
+Write a function to get the number of jobs for the given technology.<br>
+*Note:* The API gives a maximum of 50 jobs per page.<br>
+If you get 50 jobs per page, it means there could be some more job listings available.<br>
+So if you get 50 jobs per page you should make another API call for next page to check for more jobs.<br>
+If you get less than 50 jobs per page, you can take it as the final count.<br>
+
+
+def get_number_of_jobs(technology):
+    number_of_jobs=data.groupby('technology').sum().loc[technology,:][0]
+    return technology,number_of_jobs
+
+Call the function for Python and check if it is working.
+
+
+print(get_number_of_jobs('python'))
+
+### Store the results in an excel file
+
+
+Call the API for all the given technologies above and write the results in an excel spreadsheet.
+
+
+If you do not know how create excel file using python, double click here for **hints**.
+
+<!--
+
+from openpyxl import Workbook        # import Workbook class from module openpyxl
+wb=Workbook()                        # create a workbook object
+ws=wb.active                         # use the active worksheet
+ws.append(['Country','Continent'])   # add a row with two columns 'Country' and 'Continent'
+ws.append(['Eygpt','Africa'])        # add a row with two columns 'Egypt' and 'Africa'
+ws.append(['India','Asia'])          # add another row
+ws.append(['France','Europe'])       # add another row
+wb.save("countries.xlsx")            # save the workbook into a file called countries.xlsx
+
+
+-->
+
+
+Create a python list of all technologies for which you need to find the number of jobs postings.
+
+
+#your code goes here
+
+Import libraries required to create excel spreadsheet
+
+
+# your code goes here
+
+Create a workbook and select the active worksheet
+
+
+# your code goes here
+
+Find the number of jobs postings for each of the technology in the above list.
+Write the technology name and the number of jobs postings into the excel spreadsheet.
+
+
+#your code goes here
+
+Save into an excel spreadsheet named 'github-job-postings.xlsx'.
+
+
+#your code goes here
+
+## Authors
+
+
+Ramesh Sannareddy
+
+
+### Other Contributors
+
+
+Rav Ahuja
+
+
+## Change Log
+
+
+| Date (YYYY-MM-DD) | Version | Changed By        | Change Description                 |
+| ----------------- | ------- | ----------------- | ---------------------------------- |
+| 2021-6-25         | 0.2     | Malika            | Updated GitHub job json link       |
+| 2020-10-17        | 0.1     | Ramesh Sannareddy | Created initial version of the lab |
+
+
+Copyright © 2020 IBM Corporation. This notebook and its source code are released under the terms of the [MIT License](https://cognitiveclass.ai/mit-license?utm_medium=Exinfluencer&utm_source=Exinfluencer&utm_content=000026UJ&utm_term=10006555&utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMDA0321ENSkillsNetwork21426264-2021-01-01&cm_mmc=Email_Newsletter-\_-Developer_Ed%2BTech-\_-WW_WW-\_-SkillsNetwork-Courses-IBM-DA0321EN-SkillsNetwork-21426264&cm_mmca1=000026UJ&cm_mmca2=10006555&cm_mmca3=M12345678&cvosrc=email.Newsletter.M12345678&cvo_campaign=000026UJ).
